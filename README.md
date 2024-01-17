@@ -11,7 +11,3 @@ ansible-vault encrypt vault.yaml
 ansible-playbook lpar-usage-facts.yaml
 ```
 - Open the created file `output.txt` to see the results.
-- Optionally, add verbosity to the playbook command to print the output table to the terminal:
-```
-ansible-playbook lpar-usage-facts.yaml -v
-```

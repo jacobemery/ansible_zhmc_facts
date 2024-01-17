@@ -19,7 +19,6 @@
     - name: Print out IFL usage data from previous task.
       ansible.builtin.debug:
         var: zhmccli_output.stdout_lines
-        verbosity: 1
 
     - name: Save IFL usage data to file.
       ansible.builtin.blockinfile:
