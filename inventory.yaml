@@ -1,0 +1,8 @@
+all:
+  hosts:
+    localhost:
+      ansible_host: 127.0.0.1
+      ansible_connection: local
+      hmc_host: # Set HMC IP address or hostname here
+      hmc_user: # Set HMC username here
+      # Set HMC password in vault.yaml

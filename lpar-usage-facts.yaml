@@ -1,0 +1,30 @@
+---
+- name: Gather facts about LPARs from HMC.
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - vault.yaml
+  tasks:
+
+    - name: Ensure zhmccli package is installed.
+      ansible.builtin.pip:
+        name: zhmccli
+
+    - name: Get IFL usage data from zHMC API using zhmccli.
+      ansible.builtin.shell: |
+        export ZHMC_PASSWORD={{ vault_hmc_pass }} && zhmc -n -h {{ hmc_host }} -u {{ hmc_user }} partition list --ifl-usage
+      register: zhmccli_output
+      changed_when: false
+
+    - name: Print out IFL usage data from previous task.
+      ansible.builtin.debug:
+        var: zhmccli_output.stdout_lines
+        verbosity: 1
+
+    - name: Save IFL usage data to file.
+      ansible.builtin.blockinfile:
+        path: "{{ playbook_dir }}/output.txt"
+        state: present
+        mode: '755'
+        create: true
+        block: "{{ zhmccli_output.stdout }}"
