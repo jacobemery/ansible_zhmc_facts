@@ -3,6 +3,12 @@ all:
     localhost:
       ansible_host: 127.0.0.1
       ansible_connection: local
+      cpc_name: # Set target CPC here
       hmc_host: # Set HMC IP address or hostname here
-      hmc_user: # Set HMC username here
-      # Set HMC password in vault.yaml
+      hmc_auth:
+        userid: # Set HMC userid here
+        password: # Set HMC password here, make sure to encrypt it with ansible-vault encrypt string
+        # verify: false # if needed
+      lpar_name: # Set target LPAR name here
+      nic_name: # Set target NIC name here
+      sg_name: # Set target Storage Group name here
