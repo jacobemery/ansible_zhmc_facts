@@ -1,0 +1,113 @@
+---
+- name: Gather facts from the HMC.
+  hosts: localhost
+  gather_facts: false
+  tasks:
+
+    - name: Ensure zhmccli package is installed.
+      tags: all
+      ansible.builtin.pip:
+        name: zhmccli
+
+    - name: "Get facts for CPC {{ cpc_name }}"
+      tags: cpc_facts
+      ibm.ibm_zhmc.zhmc_cpc:
+        hmc_host: "{{ hmc_host }}"
+        hmc_auth: "{{ hmc_auth }}"
+        name: "{{ cpc_name }}"
+        state: facts
+      register: cpc_facts_result
+
+    - name: Print the result
+      tags: cpc_facts
+      ansible.builtin.debug:
+        var: cpc_facts_result
+
+    - name: "List all permitted adapters on CPC {{ cpc_name }}"
+      tags: adapter_list
+      ibm.ibm_zhmc.zhmc_adapter_list:
+        hmc_host: "{{ hmc_host }}"
+        hmc_auth: "{{ hmc_auth }}"
+        cpc_name: "{{ cpc_name }}"
+      register: adapter_list_result
+
+    - name: Print the result
+      tags: adapter_list
+      ansible.builtin.debug:
+        var: adapter_list_result
+
+    - name: "Gather facts about NIC {{ nic_name }}"
+      tags: nic_facts
+      ibm.ibm_zhmc.zhmc_nic:
+        hmc_host: "{{ hmc_host }}"
+        hmc_auth: "{{ hmc_auth }}"
+        cpc_name: "{{ cpc_name }}"
+        partition_name: "{{ lpar_name }}"
+        name: "{{ nic_name }}"
+        state: facts
+      register: nic_facts_result
+
+    - name: Print the result
+      tags: nic_facts
+      ansible.builtin.debug:
+        var: nic_facts_result
+
+    - name: "List the NICs of partition {{ lpar_name }}"
+      tags: nic_list
+      ibm.ibm_zhmc.zhmc_nic_list:
+        hmc_host: "{{ hmc_host }}"
+        hmc_auth: "{{ hmc_auth }}"
+        cpc_name: "{{ cpc_name }}"
+        partition_name: "{{ lpar_name }}"
+      register: nic_list_result
+
+    - name: Print the result
+      tags: nic_list
+      ansible.builtin.debug:
+        var: nic_list_result
+
+    - name: "Gather facts about {{ lpar_name }}"
+      tags: lpar_facts
+      ibm.ibm_zhmc.zhmc_partition:
+        hmc_host: "{{ hmc_host }}"
+        hmc_auth: "{{ hmc_auth }}"
+        cpc_name: "{{ cpc_name }}"
+        name: "{{ lpar_name }}"
+        state: facts
+        expand_storage_groups: true
+        expand_crypto_adapters: true
+      register: lpar_facts_result
+
+    - name: Print the result
+      tags: lpar_facts
+      ansible.builtin.debug:
+        var: lpar_facts_result
+
+    - name: "List the permitted partitions on CPC {{ cpc_name }}"
+      tags: lpar_list
+      ibm.ibm_zhmc.zhmc_partition_list:
+        hmc_host: "{{ hmc_host }}"
+        hmc_auth: "{{ hmc_auth }}"
+        cpc_name: "{{ cpc_name }}"
+      register: lpar_list_result
+
+    - name: Print the result
+      tags: lpar_list
+      ansible.builtin.debug:
+        var: lpar_list_result
+
+    - name: "Gather facts about storage group {{ sg_name }}"
+      tags: sg_facts
+      ibm.ibm_zhmc.zhmc_storage_group:
+        hmc_host: "{{ hmc_host }}"
+        hmc_auth: "{{ hmc_auth }}"
+        cpc_name: "{{ cpc_name }}"
+        name: "{{ sg_name }}"
+        state: facts
+        expand: true
+      register: sg_facts_result
+
+    - name: Print the result
+      tags: sg_facts
+      ansible.builtin.debug:
+        var: sg_facts_result
