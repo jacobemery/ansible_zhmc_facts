@@ -1,7 +1,6 @@
 # lpar-usage-facts
 Example playbooks for demonstrating Ansible's ability to gather facts from the Hardware Management Console (HMC) using the [ibm.ibm_zhmc](https://galaxy.ansible.com/ui/repo/published/ibm/ibm_zhmc/) collection.
 
-How To:
 Pre-Requisites:
 - Access and permissions to a Hardware Management Console (HMC).
 - Ansible and Python installed on the Ansible Controller
